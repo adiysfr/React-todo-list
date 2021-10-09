@@ -4,18 +4,14 @@ import FormInput from "./components/FormInput";
 import TodoItem from "./components/TodoItem";
 import Header from "./components/Header";
 import EditTodo from "./components/EditTodo";
-// import ConfirmModal from "./components/ConfirmModal";
+import ConfirmModal from "./components/ConfirmModal";
 
 export default class App extends Component {
   state = {
     todos: [
       {
         id: 1,
-        title: "reading book",
-      },
-      {
-        id: 2,
-        title: "play game",
+        title: 'your todo list...',
       },
     ],
     isEdit: false,
@@ -27,9 +23,21 @@ export default class App extends Component {
   };
 
   // function for delete
-  deleteTask = (id) => {
+  deleteTask = () => {
     this.setState({
-      todos: this.state.todos.filter(item => item.id !== id)
+      isModalConfirm: true
+    })
+  };
+  cancelDeleteTask = () => {
+    this.setState({
+      isModalConfirm: false
+    })
+  };
+  handleComfirmDelete = (id) => {
+    console.log(id)
+    this.setState({
+      todos: this.state.todos.filter(item => item.id !== id),
+      isModalConfirm: false
     })
   };
 
@@ -113,6 +121,15 @@ export default class App extends Component {
           data={this.state.editTodo}
           update={this.update}
         />
+        {todos.map((item) => (
+          <ConfirmModal 
+            key={item.id}
+            todoData={item}
+            comfirmDeleteModal={this.state.isModalConfirm}
+            cancelDeleteTask={this.cancelDeleteTask}
+            handleComfirmDelete={this.handleComfirmDelete}
+          />
+          ))}
       </div>
     );
   }
